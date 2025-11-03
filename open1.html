@@ -157,14 +157,19 @@
         .next-button:hover::after {
             transform: translateX(5px);
         }
-    </style>
+    
+.next-button.no-arrow::after {
+    content: none !important;
+}
+
+</style>
 </head>
 <body>
     <div class="slide-container">
         <div class="word-cloud" id="wordCloud"></div>
     </div>
     
-    <a href="https://satylin.github.io/HtmlShow/detail1.html" class="next-button">
+    <a href="https://satylin.github.io/HtmlShow/2025簡報履歷_正式版.html" class="next-button">
         下一頁
     </a>
 
@@ -221,5 +226,14 @@
             }, 50);
         });
     </script>
+
+<a href="https://github.com/satylin/HtmlShow/2025簡報履歷_正式版.html" class="next-button no-arrow" style="
+    right: auto;
+    left: 40px;
+    background: linear-gradient(135deg, #4682b4 0%, #1e90ff 100%);
+">
+    補充說明
+</a>
+
 </body>
 </html>
