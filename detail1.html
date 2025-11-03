@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>職涯發展簡報</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Microsoft JhengHei', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .presentation {
+            max-width: 1600px;
+            width: 100%;
+        }
+        
+        .slide {
+            background: white;
+            border-radius: 20px;
+            padding: 60px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            margin-bottom: 30px;
+            display: none;
+        }
+        
+        .slide.active {
+            display: block;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 60px;
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+        
+        .timeline-container {
+            position: relative;
+            padding: 20px 0;
+        }
+        
+        .years {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 40px;
+            padding: 0 20px;
+            font-size: 0.85em;
+            color: #7f8c8d;
+            font-weight: 500;
+        }
+        
+        .career-row, .skill-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            min-height: 50px;
+        }
+        
+        .name-label {
+            width: 120px;
+            font-size: 1.1em;
+            font-weight: 500;
+            color: #2c3e50;
+            flex-shrink: 0;
+        }
+        
+        .timeline-track {
+            flex: 1;
+            height: 45px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            position: relative;
+            overflow: visible;
+        }
+        
+        .timeline-bar {
+            position: absolute;
+            height: 100%;
+            background: #00bcd4;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 1.05em;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 188, 212, 0.3);
+        }
+        
+        .timeline-bar:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 188, 212, 0.4);
+        }
+        
+        /* 第一頁職位顏色 */
+        #slide1 .career-row:nth-child(1) .timeline-bar { background: linear-gradient(135deg, #00bcd4, #0097a7); }
+        #slide1 .career-row:nth-child(2) .timeline-bar { background: linear-gradient(135deg, #2196f3, #1976d2); }
+        #slide1 .career-row:nth-child(3) .timeline-bar { background: linear-gradient(135deg, #3f51b5, #303f9f); }
+        #slide1 .career-row:nth-child(4) .timeline-bar { background: linear-gradient(135deg, #009688, #00796b); }
+        #slide1 .career-row:nth-child(5) .timeline-bar { background: linear-gradient(135deg, #ff9800, #f57c00); }
+        #slide1 .career-row:nth-child(6) .timeline-bar { background: linear-gradient(135deg, #e91e63, #c2185b); }
+        
+        /* 第二頁技能顏色 */
+        .skill-bar { background: linear-gradient(135deg, #81c784, #66bb6a); }
+        
+        /* 第三頁專案表格 */
+        .project-table-container {
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+        
+        .project-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95em;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .project-table thead {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .project-table th {
+            padding: 15px 8px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.85em;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .project-table td {
+            padding: 12px 8px;
+            text-align: center;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .project-table tbody tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        .project-table tbody tr:hover {
+            background-color: #e3f2fd;
+            transition: background-color 0.3s ease;
+        }
+        
+        .company-cell {
+            text-align: left;
+            font-weight: 600;
+            color: #2c3e50;
+            background-color: #f0f0f0 !important;
+        }
+        
+        .project-name {
+            text-align: left;
+            padding-left: 15px;
+            color: #34495e;
+        }
+        
+        .category-cell {
+            font-weight: 500;
+            color: #7f8c8d;
+        }
+        
+        .check-mark {
+            color: #4caf50;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        
+        .controls {
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            background: white;
+            border: none;
+            padding: 15px 40px;
+            margin: 0 10px;
+            border-radius: 50px;
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #667eea;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .page-indicator {
+            color: white;
+            font-size: 1.2em;
+            margin-top: 20px;
+            font-weight: 500;
+        }
+        
+        @media (max-width: 768px) {
+            .slide {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 1.5em;
+                margin-bottom: 30px;
+            }
+            
+            .project-table {
+                font-size: 0.75em;
+            }
+            
+            .project-table th,
+            .project-table td {
+                padding: 8px 4px;
+            }
+            
+            .name-label {
+                width: 90px;
+                font-size: 0.95em;
+            }
+            
+            .timeline-bar {
+                font-size: 0.85em;
+            }
+            
+            .years {
+                font-size: 0.7em;
+            }
+            
+            .btn {
+                padding: 12px 30px;
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation">
+        <!-- 第一頁：職涯發展 -->
+        <div id="slide1" class="slide active">
+            <h1>職涯發展歷程</h1>
+            
+            <div class="timeline-container">
+                <div class="years">
+                    <span>2002</span>
+                    <span>2005</span>
+                    <span>2008</span>
+                    <span>2011</span>
+                    <span>2014</span>
+                    <span>2017</span>
+                    <span>2020</span>
+                    <span>2023</span>
+                    <span>2025</span>
+                </div>
+                
+                <div class="career-row">
+                    <div class="name-label">博客來</div>
+                    <div class="timeline-track">
+                        <div class="timeline-bar" style="left: 0%; width: 8.7%;">MIS</div>
+                    </div>
+                </div>
+                
+                <div class="career-row">
+                    <div class="name-label">元京證</div>
+                    <div class="timeline-track">
+                        <div class="timeline-bar" style="left: 13%; width: 13%;">資訊工程師</div>
+                    </div>
+                </div>
+                
+                <div class="career-row">
+                    <div class="name-label">群益證券</div>
+                    <div class="timeline-track">
+                        <div class="timeline-bar" style="left: 21.7%; width: 26%;">程式設計師</div>
+                    </div>
+                </div>
+                
+                <div class="career-row">
+                    <div class="name-label">永慶房屋</div>
+                    <div class="timeline-track">
+                        <div class="timeline-bar" style="left: 43.5%; width: 26%;">BI商業智慧工程師</div>
+                    </div>
+                </div>
+                
+                <div class="career-row">
+                    <div class="name-label">遊戲橘子</div>
+                    <div class="timeline-track">
+                        <div class="timeline-bar" style="left: 65.2%; width: 26%;">資深資料分析師</div>
+                    </div>
+                </div>
+                
+                <div class="career-row">
+                    <div class="name-label">遠東新</div>
+                    <div class="timeline-track">
+                        <div class="timeline-bar" style="left: 95.7%; width: 4.3%; font-size: 0.75em">AI工程師</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 第二頁：工作技能 -->
+        <div id="slide2" class="slide">
+            <h1>工作技能發展</h1>
+            
+            <div class="timeline-container">
+                <div class="years">
+                    <span>2002</span>
+                    <span>2005</span>
+                    <span>2008</span>
+                    <span>2011</span>
+                    <span>2014</span>
+                    <span>2017</span>
+                    <span>2020</span>
+                    <span>2023</span>
+                    <span>2025</span>
+                </div>
+                
+                <div class="skill-row">
+                    <div class="name-label">DB</div>
+                    <div class="timeline-track">
+                        <div class="timeline-bar skill-bar" style="left: 0%; width: 12.2%;">Sybase</div>
+                        <div class="timeline-bar skill-bar" style="left: 17.4%; width: 82.6%;">MS SQL / T-SQL code</div>
+                    </div>
+                </div>
+                
+                <div class="skill-row">
+                    <div class="name-label">AP</div>
+                    <div class="timeline-track">
+                        <div class="timeline-bar skill-bar" style="left: 0%; width: 12.2%;">PowerBuilder</div>
+                    </div>
+                </div>
+                
+                <div class="skill-row">
+                    <div class="name-label">.net</div>
+                    <div class="timeline-track">
+                        <div class="timeline-bar skill-bar" style="left: 21.7%; width: 21.7%;">Asp.net</div>
+                        <div class="timeline-bar skill-bar" style="left: 52.2%; width: 13%;">.net</div>
+                    </div>
+                </div>
+                
+                <div class="skill-row">
+                    <div class="name-label"></div>
+                    <div class="timeline-track">
+                        <div class="timeline-bar skill-bar" style="left: 21.7%; width: 21.7%;">SmartQuery</div>
+                    </div>
+                </div>
+                
+                <div class="skill-row">
+                    <div class="name-label">BI</div>
+                    <div class="timeline-track">
+                        <div class="timeline-bar skill-bar" style="left: 43.5%; width: 56.5%;">
+                            <span>SSIS / SSRS / SSAS</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="skill-row">
+                    <div class="name-label">行動BI</div>
+                    <div class="timeline-track">
+                        <div class="timeline-bar skill-bar" style="left: 73.9%; width: 26.1%;">Power BI</div>
+                    </div>
+                </div>
+                
+                <div class="skill-row">
+                    <div class="name-label">Python</div>
+                    <div class="timeline-track">
+                        <div class="timeline-bar skill-bar" style="left: 95.7%; width: 4.3%;font-size: 0.2em">LangChain</div>
+                    </div>
+                </div>
+                
+                <div class="skill-row">
+                    <div class="name-label">其他</div>
+                    <div class="timeline-track">
+                        <div class="timeline-bar skill-bar" style="left: 39.1%; width: 13%;">Excel VBA</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 第三頁：專案經歷 -->
+        <div id="slide3" class="slide">
+            <h1>專案經歷與技術應用</h1>
+            
+            <div class="project-table-container">
+                <table class="project-table">
+                    <thead>
+                        <tr>
+                            <th>公司</th>
+                            <th>專案名稱</th>
+                            <th>類別</th>
+                            <th>行動BI</th>
+                            <th>Python</th>
+                            <th>SSIS</th>
+                            <th>SSRS</th>
+                            <th>SSAS</th>
+                            <th>MDX/DAX</th>
+                            <th>MS SQL<br>T-SQL</th>
+                            <th>EXCEL<br>VBA</th>
+                            <th>Asp.Net</th>
+                            <th>SmartQuery</th>
+                            <th>PB</th>
+                            <th>AP</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="company-cell" >遠東新</td>
+                            <td class="project-name">AI智能幫手</td>
+                            <td class="category-cell">專案</td>
+                            <td></td>
+                            <td class="check-mark">v</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td class="check-mark">v</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+							<td class="company-cell" rowspan="7">遊戲橘子</td>
+                            <td class="project-name">PowerBI 首長行動化報表</td>
+                            <td class="category-cell">專案</td>
+                            <td class="check-mark">v</td>
+                            <td></td>
+                            <td class="check-mark">v</td>
+                            <td></td>
+                            <td></td>
+                            <td class="check-mark">v</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="project-name">BUIS 架構改寫</td>
+                            <td class="category-cell">專案</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td class="check-mark">v</td>
+                            <td></td>
+                            <td class="check-mark">v</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="project-name">行動化報表_Roambi</td>
+                            <td class="category-cell">專案</td>
+                            <td class="check-mark">v</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="project-name">財務資料整合自動化</td>
+                            <td class="category-cell">專案</td>
+                            <td></td>
+                            <td></td>
+                            <td class="check-mark">v</td>
+                            <td class="check-mark">v</td>
+                            <td class="check-mark">v</td>
+                            <td></td>
+                            <td class="check-mark">v</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="project-name">電子發票ETL轉檔</td>
+                            <td class="category-cell">專案</td>
+                            <td></td>
+                            <td></td>
+                            <td class="check-mark">v</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="project-name">財務報表中心平台</td>
+                            <td class="category-cell">工作</td>
+                            <td></td>
+                            <td></td>
+                            <td class="check-mark">v</td>
+                            <td class="check-mark">v</td>
+                            <td class="check-mark">v</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="project-name">GV / AR 模組ETL轉檔</td>
+                            <td class="category-cell">專案</td>
+                            <td></td>
+                            <td></td>
+                            <td class="check-mark">v</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+							<td class="company-cell" rowspan="5">群益證券</td>
+                            <td class="project-name">客電400系統</td>
+                            <td class="category-cell">專案</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td class="check-mark">v</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="project-name">權限管理系統</td>
+                            <td class="category-cell">專案</td>
+                            <td></td>
+                            <td></td>
+                            <td class="check-mark">v</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td class="check-mark">v</td>
+                            <td class="check-mark">v</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="project-name">研展月報系統化</td>
+                            <td class="category-cell">專案</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td class="check-mark">v</td>
+                            <td></td>
+                            <td class="check-mark">v</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="project-name">客戶總歸戶</td>
+                            <td class="category-cell">專案</td>
+                            <td></td>
+                            <td></td>
+                            <td class="check-mark">v</td>
+                            <td></td>
+                            <td></td>
+                            <td class="check-mark">v</td>
+                            <td class="check-mark">v</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="project-name">工時系統</td>
+                            <td class="category-cell">專案</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td class="check-mark">v</td>
+                            <td></td>
+                            <td></td>
+                            <td class="check-mark">v</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="company-cell" rowspan="4">群益證券</td>
+                            <td class="project-name">海內外期貨業員業績統整報表</td>
+                            <td class="category-cell">專案</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td class="check-mark">v</td>
+                            <td></td>
+                            <td class="check-mark">v</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="project-name">電子對帳單</td>
+                            <td class="category-cell">專案</td>
+                            <td></td>
+                            <td></td>
+                            <td class="check-mark">v</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td class="check-mark">v</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="project-name">保金保代系統</td>
+                            <td class="category-cell">工作</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td class="check-mark">v</td>
+                            <td></td>
+                            <td></td>
+                            <td class="check-mark">v</td>
+                            <td class="check-mark">v</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            
+                            <td class="project-name">期貨CRM</td>
+                            <td class="category-cell">工作</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td class="check-mark">v</td>
+                            <td class="check-mark">v</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+							<td class="company-cell" rowspan="3">元大證券</td>
+                            <td class="project-name">期貨後台抓帳</td>
+                            <td class="category-cell">工作</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="project-name">電子對帳單改寫</td>
+                            <td class="category-cell">專案</td>
+                            <td></td>
+                            <td></td>
+                            <td class="check-mark">v</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td class="check-mark">v</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td class="check-mark">v</td>
+                        </tr>
+                        <tr>
+                            <td class="project-name">期貨後台報表及程式開發</td>
+                            <td class="category-cell">工作</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td class="check-mark">v</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- 控制按鈕 -->
+        <div class="controls">
+            <button class="btn" id="prevBtn" onclick="changeSlide(-1)">← 上一頁</button>
+            <button class="btn" id="nextBtn" onclick="changeSlide(1)">下一頁 →</button>
+            <div class="page-indicator">
+                <span id="currentPage">1</span> / 3
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 3;
+        
+        function changeSlide(direction) {
+            const slides = document.querySelectorAll('.slide');
+            slides[currentSlide - 1].classList.remove('active');
+            
+            currentSlide += direction;
+            
+            if (currentSlide > totalSlides) currentSlide = totalSlides;
+            if (currentSlide < 1) currentSlide = 1;
+            
+            slides[currentSlide - 1].classList.add('active');
+            
+            document.getElementById('currentPage').textContent = currentSlide;
+            document.getElementById('prevBtn').disabled = currentSlide === 1;
+            document.getElementById('nextBtn').disabled = currentSlide === totalSlides;
+        }
+        
+        // 初始化按鈕狀態
+        document.getElementById('prevBtn').disabled = true;
+        
+        // 鍵盤控制
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowLeft') changeSlide(-1);
+            if (e.key === 'ArrowRight') changeSlide(1);
+        });
+    </script>
+</body>
+</html>
