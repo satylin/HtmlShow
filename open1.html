@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>林小婷個人資訊文字雲</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Microsoft JhengHei', 'Arial', sans-serif;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+        
+        .slide-container {
+            width: 95vw;
+            height: 95vh;
+            background: linear-gradient(135deg, #1a1a2e 0%, #0f0f1e 50%, #1a1a2e 100%);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 50px rgba(0,0,0,0.8);
+        }
+        
+        .slide-container::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(255,165,0,0.1) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(30,144,255,0.1) 0%, transparent 40%);
+            z-index: 0;
+        }
+        
+        .word-cloud {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            box-sizing: border-box;
+            z-index: 1;
+        }
+        
+        .word {
+            position: absolute;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: fadeIn 1.5s ease-in-out;
+            letter-spacing: 1px;
+        }
+        
+        .word:hover {
+            transform: scale(1.15) !important;
+            filter: brightness(1.3);
+            z-index: 100;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        .word-large {
+            font-size: 6em;
+            color: #fff;
+            text-shadow: 0 0 20px rgba(255,255,255,0.5), 0 0 40px rgba(255,165,0,0.3);
+            z-index: 10;
+        }
+        
+        .word-medium-1 {
+            font-size: 3.2em;
+            color: #ffa500;
+            text-shadow: 0 0 15px rgba(255,165,0,0.4);
+        }
+        
+        .word-medium-2 {
+            font-size: 3em;
+            color: #87ceeb;
+            text-shadow: 0 0 15px rgba(135,206,235,0.4);
+        }
+        
+        .word-medium-3 {
+            font-size: 2.8em;
+            color: #fff8dc;
+            text-shadow: 0 0 12px rgba(255,248,220,0.3);
+        }
+        
+        .word-small-1 {
+            font-size: 2em;
+            color: #ff6347;
+            text-shadow: 0 0 10px rgba(255,99,71,0.3);
+        }
+        
+        .word-small-2 {
+            font-size: 1.9em;
+            color: #4682b4;
+            text-shadow: 0 0 10px rgba(70,130,180,0.3);
+        }
+        
+        .word-small-3 {
+            font-size: 1.85em;
+            color: #daa520;
+            text-shadow: 0 0 10px rgba(218,165,32,0.3);
+        }
+        
+        .word-small-4 {
+            font-size: 1.8em;
+            color: #20b2aa;
+            text-shadow: 0 0 10px rgba(32,178,170,0.3);
+        }
+        
+        .next-button {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            padding: 15px 35px;
+            background: linear-gradient(135deg, #ffa500 0%, #ff6347 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.2em;
+            font-weight: bold;
+            box-shadow: 0 0 20px rgba(255,165,0,0.5), 0 5px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .next-button:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 0 30px rgba(255,165,0,0.7), 0 8px 20px rgba(0,0,0,0.4);
+        }
+        
+        .next-button::after {
+            content: '→';
+            font-size: 1.3em;
+            transition: transform 0.3s ease;
+        }
+        
+        .next-button:hover::after {
+            transform: translateX(5px);
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="word-cloud" id="wordCloud"></div>
+    </div>
+    
+    <a href="https://satylin.github.io/HtmlShow/2025簡報履歷_正式版.html" class="next-button">
+        下一頁
+    </a>
+
+    <script>
+        const words = [
+            { text: '林小婷', class: 'word-large', x: 50, y: 50 },
+            { text: '元智大學資管系', class: 'word-medium-1', x: 30, y: 30 },
+            { text: '家住中和', class: 'word-medium-2', x: 70, y: 28 },
+            { text: '職業婦女', class: 'word-medium-3', x: 25, y: 65 },
+            { text: '45歲', class: 'word-medium-1', x: 72, y: 62 },
+            { text: '系統分析師', class: 'word-small-1', x: 15, y: 45 },
+            { text: '商業智慧', class: 'word-small-2', x: 85, y: 42 },
+            { text: '二個國小男童的媽媽', class: 'word-small-3', x: 42, y: 78 },
+            { text: '遊戲橘子財務系統部', class: 'word-small-4', x: 58, y: 20 },
+            // 裝飾性文字
+            { text: 'professional', class: 'word-small-2', x: 8, y: 18 },
+            { text: 'analyst', class: 'word-small-3', x: 90, y: 75 },
+            { text: 'mother', class: 'word-small-1', x: 12, y: 80 },
+            { text: 'experience', class: 'word-small-4', x: 82, y: 15 },
+            { text: 'career', class: 'word-small-2', x: 18, y: 92 },
+            { text: 'family', class: 'word-small-1', x: 88, y: 88 },
+            { text: '智慧', class: 'word-small-3', x: 6, y: 58 },
+            { text: '資訊', class: 'word-small-4', x: 92, y: 52 },
+            { text: '分析', class: 'word-small-1', x: 35, y: 12 },
+            { text: '系統', class: 'word-small-2', x: 65, y: 85 }
+        ];
+
+        const cloudContainer = document.getElementById('wordCloud');
+
+        words.forEach((word, index) => {
+            const wordEl = document.createElement('div');
+            wordEl.className = `word ${word.class}`;
+            wordEl.textContent = word.text;
+            wordEl.style.animationDelay = `${index * 0.08}s`;
+            
+            wordEl.style.left = `${word.x}%`;
+            wordEl.style.top = `${word.y}%`;
+            wordEl.style.transform = 'translate(-50%, -50%)';
+            
+            cloudContainer.appendChild(wordEl);
+        });
+
+        // 添加微妙的浮動動畫
+        const allWords = document.querySelectorAll('.word');
+        allWords.forEach((word, index) => {
+            let angle = Math.random() * Math.PI * 2;
+            let radius = 5 + Math.random() * 10;
+            
+            setInterval(() => {
+                angle += 0.02;
+                const offsetX = Math.cos(angle) * radius;
+                const offsetY = Math.sin(angle) * radius;
+                word.style.transform = `translate(calc(-50% + ${offsetX}px), calc(-50% + ${offsetY}px))`;
+            }, 50);
+        });
+    </script>
+</body>
+</html>
