@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>專業技能與經驗</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft JhengHei', 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            text-align: center;
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 40px;
+            font-size: 1.1em;
+        }
+
+        .skill-item {
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .skill-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .skill-header {
+            padding: 20px 24px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            transition: background 0.3s ease;
+        }
+
+        .skill-header:hover {
+            background: linear-gradient(135deg, #e0e7ff 0%, #c3cfe2 100%);
+        }
+
+        .skill-title {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #2d3748;
+            flex: 1;
+            line-height: 1.5;
+        }
+
+        .skill-number {
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 32px;
+            font-weight: bold;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        .toggle-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #667eea;
+            font-size: 1.3em;
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .skill-item.active .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .skill-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.4s ease;
+        }
+
+        .skill-item.active .skill-content {
+            max-height: 500px;
+            padding: 20px 24px;
+        }
+
+        .sub-item {
+            padding: 12px 16px;
+            margin-bottom: 10px;
+            background: #f7fafc;
+            border-left: 4px solid #667eea;
+            border-radius: 6px;
+            color: #4a5568;
+            line-height: 1.6;
+            transition: all 0.3s ease;
+        }
+
+        .sub-item:hover {
+            background: #edf2f7;
+            border-left-color: #764ba2;
+            transform: translateX(4px);
+        }
+
+        .sub-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .sub-label {
+            font-weight: 600;
+            color: #667eea;
+            margin-right: 8px;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .skill-header {
+                padding: 16px 20px;
+            }
+
+            .skill-title {
+                font-size: 1em;
+            }
+
+            .skill-number {
+                width: 28px;
+                height: 28px;
+                line-height: 28px;
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>專業技能與經驗</h1>
+        <p class="subtitle">Professional Skills & Experience Portfolio</p>
+
+        <div class="skills-list">
+            <div class="skill-item">
+                <div class="skill-header">
+                    <span class="skill-number">1</span>
+                    <div class="skill-title">跨系統資料梳理及資料倉儲整合(ETL)應用(SSIS、T-SQL、Store Procedure、Python)</div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="skill-content">
+                    <div class="sub-item"><span class="sub-label">1.</span>(永慶)客戶總歸戶</div>
+                    <div class="sub-item"><span class="sub-label">2.</span>(永慶)權限盤點系統</div>
+                    <div class="sub-item"><span class="sub-label">3.</span>(橘子)集團子公司營運資料</div>
+                    <div class="sub-item"><span class="sub-label">4.</span>(橘子)BUIS改寫</div>
+                </div>
+            </div>
+
+            <div class="skill-item">
+                <div class="skill-header">
+                    <span class="skill-number">2</span>
+                    <div class="skill-title">SSAS之規劃、設計、分析、維護</div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="skill-content">
+                    <div class="sub-item"><span class="sub-label">1.</span>(永慶)研究部門建置房市分析系統</div>
+                    <div class="sub-item"><span class="sub-label">2.</span>(橘子)財務管會系統</div>
+                </div>
+            </div>
+
+            <div class="skill-item">
+                <div class="skill-header">
+                    <span class="skill-number">3</span>
+                    <div class="skill-title">報表規劃及設計 (SSRS 3年以上經驗)</div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="skill-content">
+                    <div class="sub-item"><span class="sub-label">1.</span>(橘子)財務管會系統</div>
+                    <div class="sub-item"><span class="sub-label">2.</span>(橘子)使用SSRS讓User可設定屬性</div>
+                    <div class="sub-item"><span class="sub-label">3.</span>(橘子)使用SSRS讓User可手動轉檔</div>
+                    <div class="sub-item"><span class="sub-label">4.</span>(橘子)SSRS介面開發可呼叫Oracle系統的功能,讓User可批次上傳更新資料,更新至ERP</div>
+                </div>
+            </div>
+
+            <div class="skill-item">
+                <div class="skill-header">
+                    <span class="skill-number">4</span>
+                    <div class="skill-title">資料分析(銷售、MES、財務...等製造業分析)</div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="skill-content">
+                    <div class="sub-item"><span class="sub-label">1.</span>(橘子)子公司營運資料分析</div>
+                </div>
+            </div>
+
+            <div class="skill-item">
+                <div class="skill-header">
+                    <span class="skill-number">5</span>
+                    <div class="skill-title">熟悉關聯式資料庫(MS SQL、SAP HANA ...)操作、開發</div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="skill-content">
+                    <div class="sub-item"><span class="sub-label">1.</span>遠東新</div>
+					<div class="sub-item"><span class="sub-label">2.</span>遊戲橘子</div>
+					<div class="sub-item"><span class="sub-label">3.</span>永慶房屋</div>
+					<div class="sub-item"><span class="sub-label">4.</span>群益證</div>
+                </div>
+            </div>
+
+            <div class="skill-item">
+                <div class="skill-header">
+                    <span class="skill-number">6</span>
+                    <div class="skill-title">數字邏輯佳、洞察及解讀數據能力強</div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="skill-content">
+                    <div class="sub-item"><span class="sub-label">1.</span>(元大)期貨後台系統抓帳</div>
+                </div>
+            </div>
+
+            <div class="skill-item">
+                <div class="skill-header">
+                    <span class="skill-number">7</span>
+                    <div class="skill-title">細心、具良好溝通能力</div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="skill-content">
+                    <div class="sub-item"><span class="sub-label">1.</span>(永慶)客電400專案</div>
+					<div class="sub-item"><span class="sub-label">2.</span>(橘子)財務管會系統</div>
+					<div class="sub-item"><span class="sub-label">3.</span>(群益證)保金保代系統</div>
+                </div>
+            </div>
+
+            <div class="skill-item">
+                <div class="skill-header">
+                    <span class="skill-number">8</span>
+                    <div class="skill-title">Dashboard(Power BI)</div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="skill-content">
+                    <div class="sub-item"><span class="sub-label">1.</span>(橘子)PBI行動化財務及營運資料系統(首長專用)</div>
+                </div>
+            </div>
+
+            <div class="skill-item">
+                <div class="skill-header">
+                    <span class="skill-number">9</span>
+                    <div class="skill-title">WEB UI開發</div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="skill-content">
+                    <div class="sub-item"><span class="sub-label">1.</span>(遠東新)AI ChatBot使用gradio開發WebUI</div>
+                </div>
+            </div>
+
+            <div class="skill-item">
+                <div class="skill-header">
+                    <span class="skill-number">10</span>
+                    <div class="skill-title">MS-SQL資料庫的日常維護與管理(具有優化調校既有的DB 屬性、環境參數、交易語法效能經驗、資料庫備份、備援)</div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="skill-content">
+                    <div class="sub-item">Table的效能調校</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const skillItems = document.querySelectorAll('.skill-item');
+        
+        skillItems.forEach(item => {
+            const header = item.querySelector('.skill-header');
+            
+            header.addEventListener('click', () => {
+                const isActive = item.classList.contains('active');
+                
+                skillItems.forEach(otherItem => {
+                    otherItem.classList.remove('active');
+                });
+                
+                if (!isActive) {
+                    item.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
